@@ -1,6 +1,6 @@
 ---
-title: "Homework 2 solutions"
-author: "Jeff Goldsmith"
+title: "Homework 2"
+author: "Yunshen Bai"
 date: '`r format(Sys.time(), "%Y-%m-%d")`'
 output: github_document
 ---
@@ -86,10 +86,36 @@ Let's talk about the 538 datasets. The `pols` data has `r nrow(pols)` observatio
 ## Problem 2
 Read and clean the Mr. Trash Wheel sheet
 ```{r}
-trash_wheel=
+mr_trash_wheel=
   read_excel("./data/202207 Trash Wheel Collection Data.xlsx",sheet = 1,skip = 1)|>
-  drop_na(Dumpster)|>
-  select(-...15,-...16)
+  janitor::clean_names()|>
+  drop_na(dumpster)|>
+  select(-x15,-x16)|>
+  mutate(homes_powered=weight_tons*500/30)
+```
+Use a similar process to import, clean, and organize the data for Professor Trash Wheel and Gwynnda
+```{r}
+professor_trash_wheel=
+  read_excel("./data/202207 Trash Wheel Collection Data.xlsx",sheet = 2,skip = 1)|>
+  janitor::clean_names()|>
+  drop_na(dumpster)|>
+  mutate(homes_powered=weight_tons*500/30)
+```
+```{r}
+Gwynnda=
+  read_excel("./data/202207 Trash Wheel Collection Data.xlsx",sheet = 4,skip = 1)|>
+  janitor::clean_names()|>
+  drop_na(dumpster)|>
+  mutate(homes_powered=weight_tons*500/30)
+```
+Next, combine these with the Mr. Trash Wheel dataset to produce a single tidy dataset
+```{r}
+mr_trash_wheel=mutate(mr_trash_wheel,belongs="Mr. Trash Wheel")
+professor_trash_wheel=mutate(professor_trash_wheel,belongs="Professor Trash Wheel")
+Gwynnda=mutate(Gwynnda,belongs="Gwynnda")
+mr_trash_wheel=mutate(mr_trash_wheel,year=as.double(year))
+trash_wheel=full_join(mr_trash_wheel,professor_trash_wheel)
+trash_wheel=full_join(trash_wheel,Gwynnda)
 ```
 
 
