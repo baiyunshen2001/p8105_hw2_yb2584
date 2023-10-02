@@ -119,3 +119,11 @@ trash_wheel=full_join(trash_wheel,Gwynnda)
 ```
 
 
+
+
+These data includes information on the dumpter number, date of collection, amount of total litter and litter type. The overall average home powered is `r mean(trash_wheel$homes_powered)`. The `mr_trash_wheel` data has `r nrow(mr_trash_wheel)` observations and `r ncol(mr_trash_wheel)` variables, and home powered for Mr. Trash Wheel is `r mean(trash_wheel$homes_powered[trash_wheel$belongs=="Mr. Trash Wheel"])`. The `professor_trash_wheel` data has `r nrow(professor_trash_wheel)` observations and `r ncol(professor_trash_wheel)` variables, and home powered for Professor Trash Wheel is `r mean(trash_wheel$homes_powered[trash_wheel$belongs=="Professor Trash Wheel"])`. The `Gwynnda` data has `r nrow(Gwynnda)` observations and `r ncol(Gwynnda)` variables, and home powered for Professor Trash Wheel is `r mean(trash_wheel$homes_powered[trash_wheel$belongs=="Gwynnda"])`. The total weight of trash collected by Professor Trash Wheel is `r sum(trash_wheel$weight_tons[trash_wheel$belongs=="Professor Trash Wheel"])`, and  total number of cigarette butts collected by Gwynnda in July of 2021 is `r sum(trash_wheel$cigarette_butts[trash_wheel$belongs=="Gwynnda"&trash_wheel$year==2021&trash_wheel$month=="July"])
+`.
+
+## Problem 3
+
+
