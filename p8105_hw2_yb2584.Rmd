@@ -154,4 +154,4 @@ Next, combine the demographic and biomarker datasets so that only participants w
 ```{r}
 data=inner_join(baseline,amyloid,join_by(id==study_id))
 ```
-
+From the result, the new dataset has `r nrow(data)` observations and `r ncol(data)` variables. The average age of the new dataset is `r mean(data$current_age)`
