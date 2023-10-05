@@ -87,7 +87,7 @@ Let's talk about the 538 datasets. The `pols` data has `r nrow(pols)` observatio
 Read and clean the Mr. Trash Wheel sheet
 ```{r}
 mr_trash_wheel=
-  read_excel("./data/202207 Trash Wheel Collection Data.xlsx",sheet = 1,skip = 1)|>
+  read_excel("./data/202309 Trash Wheel Collection Data.xlsx",sheet = 1,skip = 1)|>
   janitor::clean_names()|>
   drop_na(dumpster)|>
   select(-x15,-x16)|>
@@ -96,14 +96,14 @@ mr_trash_wheel=
 Use a similar process to import, clean, and organize the data for Professor Trash Wheel and Gwynnda
 ```{r}
 professor_trash_wheel=
-  read_excel("./data/202207 Trash Wheel Collection Data.xlsx",sheet = 2,skip = 1)|>
+  read_excel("./data/202309 Trash Wheel Collection Data.xlsx",sheet = 2,skip = 1)|>
   janitor::clean_names()|>
   drop_na(dumpster)|>
   mutate(homes_powered=weight_tons*500/30)
 ```
 ```{r}
 Gwynnda=
-  read_excel("./data/202207 Trash Wheel Collection Data.xlsx",sheet = 4,skip = 1)|>
+  read_excel("./data/202309 Trash Wheel Collection Data.xlsx",sheet = 4,skip = 1)|>
   janitor::clean_names()|>
   drop_na(dumpster)|>
   mutate(homes_powered=weight_tons*500/30)
@@ -116,6 +116,7 @@ Gwynnda=mutate(Gwynnda,belongs="Gwynnda")
 mr_trash_wheel=mutate(mr_trash_wheel,year=as.double(year))
 trash_wheel=full_join(mr_trash_wheel,professor_trash_wheel)
 trash_wheel=full_join(trash_wheel,Gwynnda)
+head(trash_wheel,20)
 ```
 
 
@@ -139,14 +140,15 @@ In import process, we read the data and set sex and apoe4 as factor variable. `b
 ```{r}
 amyloid=
   read_csv("./data/data_mci/data_mci/mci_amyloid.csv",skip=1)|>
-  janitor::clean_names()
+  janitor::clean_names()|>
+  pivot_longer(time_2:time_8,names_to = "time",values_to = "ratio")
 ```
 In import process, we read the data and clean the variable names.`amyloid` has `r nrow(amyloid)` observations and `r ncol(amyloid)` variables. 
 
 To check whether some participants appear in only the `baseline` or `amyloid` datasets, I will check whether the id in `baseline` and id in `amyloid` are same.
 ```{r}
-baseline$id %in% amyloid$study_id
-amyloid$study_id %in% baseline$id
+sum(baseline$id %in% amyloid$study_id) == length(baseline$id %in% amyloid$study_id)
+sum(amyloid$study_id %in% baseline$id) == length(amyloid$study_id %in% baseline$id)
 ```
 From the result, id in `baseline` and id in `amyloid` are not same. There are some participants appear in only the `baseline` or `amyloid` datasets.  
 
